@@ -13,6 +13,9 @@ repositories {
 dependencies {
     testImplementation platform('org.junit:junit-bom:5.9.2')
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.2'
+
+    implementation 'info.picocli:picocli:4.7.4'
+    annotationProcessor 'info.picocli:picocli-codegen:4.7.4'
 }
 
 test {
@@ -24,4 +27,5 @@ application {
 }
 compileJava {
     options.release = 19
+    options.compilerArgs += ["-Aproject=${project.group}/${project.name}"]
 }
