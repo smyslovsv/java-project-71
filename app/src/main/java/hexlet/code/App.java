@@ -25,8 +25,8 @@ public class App implements Callable<String> {
     private boolean version;
 
     @Override
-    public final String call() {
-        String difference = Differ.generate();
+    public final String call() throws Exception {
+        String difference = Differ.generate(format, filepath1, filepath2);
         System.out.println(difference);
         return difference;
     }
