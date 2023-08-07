@@ -1,6 +1,8 @@
 plugins {
     id 'java'
     id 'application'
+    id 'checkstyle'
+    id 'jacoco'
 }
 
 group = 'hexlet.code'
@@ -11,13 +13,12 @@ repositories {
 }
 
 dependencies {
-    testImplementation platform('org.junit:junit-bom:5.9.2')
+    testImplementation platform('org.junit:junit-bom:5.10.0-M1')
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.2'
-
+    testImplementation 'org.assertj:assertj-core:3.24.2'
     implementation 'info.picocli:picocli:4.7.4'
-    annotationProcessor 'info.picocli:picocli-codegen:4.7.4'
-
-    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.13.4.1'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.14.2'
 }
 
 test {
@@ -27,7 +28,21 @@ test {
 application {
     mainClass = 'hexlet.code.App'
 }
+
 compileJava {
     options.release = 19
     options.compilerArgs += ["-Aproject=${project.group}/${project.name}"]
+}
+
+jacoco {
+    applyTo run
+}
+
+tasks.register('applicationCodeCoverageReport', JacocoReport) {
+    executionData run
+    sourceSets sourceSets.main
+}
+
+jacocoTestReport {
+    dependsOn test // tests are required to run before generating the report
 }

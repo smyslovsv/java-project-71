@@ -5,35 +5,48 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Collections;
 
 public class Differ {
+    private static Path path1;
+    private static Path path2;
 
+    private static Map<String, Object> map1 = new HashMap<>();
+    private static Map<String, Object> map2 = new HashMap<>();
     public static String generate(String format, String filepath1, String filepath2) throws Exception {
-        // Чтение файлов:
+        path1 = getPath(filepath1);
+        path2 = getPath(filepath2);
 
-        // Формируем абсолютный путь, если filePath будет содержать относительный путь,
-        // то мы всегда будет работать с абсолютным
-        Path path1 = getPath(filepath1);
-        Path path2 = getPath(filepath2);
-
-        // Читаем файлы
-        String content1 = Files.readString(path1);
-        String content2 = Files.readString(path2);
-
-        // парсим JSON файлы
-        Map<String, Object> map1 = getData(content1);
-        Map<String, Object> map2 = getData(content2);
+        map1 = getData(Files.readString(path1));
+        map2 = getData(Files.readString(path2));
         // получаем список ключей
         Set<String> set = new HashSet<>(map1.keySet());
         set.addAll(map2.keySet());
-
         List<String> sortedList = new ArrayList<>(set);
         Collections.sort(sortedList);
-        System.out.println(sortedList);
+        return getDifferent(sortedList);
+    }
+    public static Path getPath(String filepath) throws Exception {
+        Path path = Paths.get(filepath).toAbsolutePath().normalize();
+        if (!Files.exists(path)) {
+            throw new Exception("File '" + path + "' does not exist");
+        }
+        return path;
+    }
+    public static Map<String, Object> getData(String content) throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.readValue(content, Map.class);
+    }
 
+    private static String getDifferent(List<String> list) {
         StringBuilder diffString = new StringBuilder("{\n");
-        for (String key : sortedList) {
+        for (String key : list) {
             diffString.append("  ");
 
             if (map1.containsKey(key) && map2.containsKey(key)) {
@@ -53,16 +66,5 @@ public class Differ {
         }
 
         return diffString.append("}").toString();
-    }
-    private static Path getPath(String filepath) throws Exception {
-        Path path = Paths.get(filepath).toAbsolutePath().normalize();
-        if (!Files.exists(path)) {
-            throw new Exception("File '" + path + "' does not exist");
-        }
-        return path;
-    }
-    private static Map<String, Object> getData(String content) throws Exception {
-        Map<String,Object> result = new ObjectMapper().readValue(content, Map.class);
-        return result;
     }
 }
