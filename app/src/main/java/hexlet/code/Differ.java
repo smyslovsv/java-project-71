@@ -1,7 +1,5 @@
 package hexlet.code;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -23,8 +21,11 @@ public class Differ {
         path1 = getPath(filepath1);
         path2 = getPath(filepath2);
 
-        map1 = getData(Files.readString(path1));
-        map2 = getData(Files.readString(path2));
+        String fileFormat1 = getFormat(filepath1);
+        String fileFormat2 = getFormat(filepath2);
+
+        map1 = Parser.getData(Files.readString(path1), fileFormat1);
+        map2 = Parser.getData(Files.readString(path2), fileFormat2);
         // получаем список ключей
         Set<String> set = new HashSet<>(map1.keySet());
         set.addAll(map2.keySet());
@@ -32,6 +33,11 @@ public class Differ {
         Collections.sort(sortedList);
         return getDifferent(sortedList);
     }
+
+    private static String getFormat(String filepath) {
+        return filepath.substring(filepath.lastIndexOf(".") + 1);
+    }
+
     public static Path getPath(String filepath) throws Exception {
         Path path = Paths.get(filepath).toAbsolutePath().normalize();
         if (!Files.exists(path)) {
@@ -39,10 +45,7 @@ public class Differ {
         }
         return path;
     }
-    public static Map<String, Object> getData(String content) throws Exception {
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(content, Map.class);
-    }
+
 
     private static String getDifferent(List<String> list) {
         StringBuilder diffString = new StringBuilder("{\n");

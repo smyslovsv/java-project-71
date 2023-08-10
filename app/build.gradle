@@ -18,7 +18,7 @@ dependencies {
     testImplementation 'org.assertj:assertj-core:3.24.2'
     implementation 'info.picocli:picocli:4.7.4'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
-    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.14.2'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.15.2'
 }
 
 test {
@@ -34,15 +34,22 @@ compileJava {
     options.compilerArgs += ["-Aproject=${project.group}/${project.name}"]
 }
 
-jacoco {
-    applyTo run
+test {
+    testLogging {
+        events "passed", "failed", "skipped"
+    }
+    finalizedBy jacocoTestReport
 }
 
-tasks.register('applicationCodeCoverageReport', JacocoReport) {
-    executionData run
-    sourceSets sourceSets.main
+jacoco {
+    toolVersion = "0.8.9"
 }
 
 jacocoTestReport {
     dependsOn test // tests are required to run before generating the report
+    reports {
+        xml.required = false
+        csv.required = true
+        html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
+    }
 }
