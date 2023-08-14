@@ -3,8 +3,11 @@ package hexlet.code.formatters;
 import java.util.List;
 import java.util.Map;
 
-import static hexlet.code.Differ.*;
+import static hexlet.code.Differ.ADDED;
 import static hexlet.code.Differ.DELETED;
+import static hexlet.code.Differ.NOT_CHANGED;
+import static hexlet.code.Differ.CHANGED_NEW;
+import static hexlet.code.Differ.CHANGED_OLD;
 
 public class Plain {
     public static String format(List<Map<String, Object>> listDiff) {
@@ -30,6 +33,7 @@ public class Plain {
         }
         return diffString.toString().trim();
     }
+
     private static String getValue(Object value) {
         String complexValue = "[complex value]";
         if (value == null) {
