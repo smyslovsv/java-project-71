@@ -15,11 +15,11 @@ public class Differ {
 
     private static Map<String, Object> map1 = new HashMap<>();
     private static Map<String, Object> map2 = new HashMap<>();
-    public static final String NOT_CHANGED = "not_changed";
-    public static final String CHANGED_OLD = "old";
-    public static final String CHANGED_NEW = "new";
-    public static final String ADDED = "added";
-    public static final String DELETED = "deleted";
+    public static final String NOT_CHANGED = "not changed";
+    public static final String CHANGED_OLD = "old value";
+    public static final String CHANGED_NEW = "new value";
+    public static final String ADDED = "added property";
+    public static final String DELETED = "deleted property";
 
     public static String generate(String filepath1, String filepath2, String format) throws Exception {
         Path path1 = getPath(filepath1);
