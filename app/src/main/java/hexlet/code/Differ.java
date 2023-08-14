@@ -20,6 +20,10 @@ public class Differ {
     public static final String CHANGED_NEW = "new value";
     public static final String ADDED = "added property";
     public static final String DELETED = "deleted property";
+    public static String generate(String filepath1, String filepath2) throws Exception {
+
+        return generate(filepath1, filepath2, "stylish");
+    }
 
     public static String generate(String filepath1, String filepath2, String format) throws Exception {
         Path path1 = getPath(filepath1);
