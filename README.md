@@ -3,6 +3,7 @@
 
 ### CodeClimate test:
 [![Maintainability](https://api.codeclimate.com/v1/badges/9019673bffe07cd8fc05/maintainability)](https://codeclimate.com/github/smyslovsv/java-project-71/maintainability)
+
 [Демонстрация сравнения файлов формата JSON и YML (форматы результатов вывода: stylish, plain, json)](https://asciinema.org/a/5DIDxv1rmDeHZQnt6UKIxWr15)
 
 Программа для поиска различий между данными в двух файлах.
